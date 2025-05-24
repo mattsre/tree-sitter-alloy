@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "alloy",
+      "camelcase": "Alloy",
+      "title": "Alloy",
+      "scope": "source.alloy",
+      "file-types": [
+        "alloy"
+      ],
+      "highlights": "queries/highlights.scm",
+      "injection-regex": "^alloy$",
+      "class-name": "TreeSitterAlloy"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "grafana alloy grammer for tree-sitter",
+    "authors": [
+      {
+        "name": "Matt Conway"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/mattsre/tree-sitter-alloy"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
