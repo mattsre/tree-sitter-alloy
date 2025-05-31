@@ -15,8 +15,6 @@ module.exports = grammar({
 
   extras: $ => [/\s/, $.comment],
 
-  word: $ => $.identifier,
-
   rules: {
     source_file: $ => repeat(
       choice($.attribute, $.block)
@@ -30,14 +28,14 @@ module.exports = grammar({
     ),
 
     attribute: $ => seq(
-      field("name", $._identifier_or_string),
+      field("name", choice($.identifier, $.string)),
       "=",
-      $.expression,
+      field("value", $.expression)
     ),
 
     block: $ => seq(
-      field("name", choice($.identifier, $.block_identifier)),
-      field("block_label", optional($.string)),
+      field("name", $.identifier),
+      field("label", optional($.string)),
       "{",
       repeat(
         choice($.attribute, $.block)
@@ -46,29 +44,22 @@ module.exports = grammar({
     ),
 
     expression: $ => choice(
+      $.identifier,
       $.string,
       $.boolean,
       $.number,
+      $.null,
       $.array,
-      $.identifier,
-      $.block_identifier,
+      $.object,
+      $.function,
     ),
-    
-    identifier: $ => token(
-      seq(
-        choice(letter, "_"),
-        repeat(
-          choice(letter, decimalDigit, "_"),
-        )
-      )
+ 
+    identifier: $ => seq(
+      $._identifier,
+      repeat(seq(".", $._identifier))
     ),
 
-    _identifier_or_string: $ => choice($.identifier, $.string),
-
-    block_identifier: $ => seq(
-      $.identifier,
-      repeat1(seq(".", $.identifier))
-    ),
+    _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     string: $ => /"[^"]*"/,
 
@@ -76,14 +67,32 @@ module.exports = grammar({
 
     number: $ => choice(/\d+/, /\d+\.\d*/),
 
+    null: $ => "null",
+
     array: $ => seq(
       "[",
       repeat(
         seq($.expression, optional(","))
       ),
       "]"
-    ),  
+    ),
 
+    object: $ => seq(
+      "{",
+      repeat(
+        seq($.attribute, optional(","))
+      ),
+      "}"
+    ),
+
+    function: $ => seq(
+      field("name", $.identifier),
+      "(",
+      field("arguments", repeat(
+        seq($.expression, optional(","))
+      )),
+      ")"
+    ),
+    
   }
 });
-

@@ -1,0 +1,167 @@
+==================
+Simple Attributes
+==================
+
+log_level = "WARN"
+replicas = 5
+isProd = true
+
+---
+
+(source_file
+  (attribute
+    name: (identifier)
+    value: (expression
+      (string)))
+  (attribute
+    name: (identifier)
+    value: (expression
+      (number)))
+  (attribute
+    name: (identifier)
+    value: (expression
+      (boolean))))
+
+==================
+Simple Block
+==================
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki-gateway.loki.svc.cluster.local"
+  }
+}
+
+loki.source.journal "kubelet" {
+  forward_to = [loki.write.default.receiver]
+}
+
+---
+
+(source_file
+  (block
+    name: (identifier)
+    label: (string)
+    (block
+      name: (identifier)
+      (attribute
+        name: (identifier)
+        value: (expression
+          (string)))))
+  (block
+    name: (identifier)
+    label: (string)
+    (attribute
+      name: (identifier)
+      value: (expression
+        (array
+          (expression
+            (identifier)))))))
+
+==================
+All Types Example
+==================
+
+// this is a comment
+log_level = "debug"
+
+
+loki.source.journal "kubelet" {
+  forward_to = [loki.write.default.receiver]
+}
+
+this_is_an_unlabeled_block {
+  replicas = 10
+  dogs = 1.5
+  was_running = false
+  test_array = [1, "true", false]
+
+  blocks_can_be_nested {
+    nested_attribute = "wow!"
+  }
+
+  headers = {
+    contentType = "application/json",
+    "kubernetes.io/hostname" = "ip-xx-xxx-xx-xxx"
+  }
+
+  realHostname = coalesce(sys.env("HOSTNAME"), "node")
+
+  noValue = null
+}
+
+---
+
+(source_file
+  (comment)
+  (attribute
+    name: (identifier)
+    value: (expression
+      (string)))
+  (block
+    name: (identifier)
+    label: (string)
+    (attribute
+      name: (identifier)
+      value: (expression
+        (array
+          (expression
+            (identifier))))))
+  (block
+    name: (identifier)
+    (attribute
+      name: (identifier)
+      value: (expression
+        (number)))
+    (attribute
+      name: (identifier)
+      value: (expression
+        (number)))
+    (attribute
+      name: (identifier)
+      value: (expression
+        (boolean)))
+    (attribute
+      name: (identifier)
+      value: (expression
+        (array
+          (expression
+            (number))
+          (expression
+            (string))
+          (expression
+            (boolean)))))
+    (block
+      name: (identifier)
+      (attribute
+        name: (identifier)
+        value: (expression
+          (string))))
+    (attribute
+      name: (identifier)
+      value: (expression
+        (object
+          (attribute
+            name: (identifier)
+            value: (expression
+              (string)))
+          (attribute
+            name: (string)
+            value: (expression
+              (string))))))
+    (attribute
+      name: (identifier)
+      value: (expression
+        (function
+          name: (identifier)
+          arguments: (expression
+            (function
+              name: (identifier)
+              arguments: (expression
+                (string))))
+          arguments: (expression
+            (string)))))
+    (attribute
+      name: (identifier)
+      value: (expression
+        (null)))))

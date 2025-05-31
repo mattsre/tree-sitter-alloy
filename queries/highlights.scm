@@ -1,19 +1,40 @@
-; -- Comments --
-(comment) @comment
 
-; -- Punctuation --
+; Literals
+; --------
+
+(boolean) @boolean
+(comment) @comment
+(string) @string
+(number) @constant.number
+(null) @constant.builtin
+
+; Punctuation
+; -----------
+
 [
-  "{"
-  "}"
+  "("
+  ")"
   "["
   "]"
-] @punctuation.bracket
+  "{"
+  "}"
+]  @punctuation.bracket
 
-"," @punctuation.delimiter
-"=" @operator
+[
+  "."
+  ","
+] @punctuation.delimiter
+
+[
+  "="
+] @operator
+
+; Function definitions
+;---------------------
+
+(function
+  name: (identifier) @function)
 
 
-; -- Basic Types --
-(string) @string
-(number) @number
-(boolean) @boolean
+(attribute (identifier) @variable.other.member)
+(block (identifier) @type.builtin)
