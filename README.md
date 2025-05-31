@@ -3,6 +3,7 @@
 A grammar for the Grafana Alloy configuration language, supports all types and most commom uses of the language.
 
 ## Showcase
+![449459055-f0671a74-82ec-4466-905b-1e3221597d59](https://github.com/user-attachments/assets/355c77f2-9145-4401-b733-a065280fcc10)
 
 ## Example
 
