@@ -7,9 +7,6 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const letter = /[a-zA-Z]/;
-const decimalDigit = /[0-9]/;
-
 module.exports = grammar({
   name: "alloy",
 
@@ -61,7 +58,14 @@ module.exports = grammar({
 
     _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    string: $ => /"[^"]*"/,
+    string: $ => token(seq(
+      '"',
+      repeat(choice(
+        /[^"\\]+/,
+        seq('\\', /./),
+      )),
+      '"',
+    )),
 
     boolean: $ => choice('true', 'false'),
 

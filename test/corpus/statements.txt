@@ -165,3 +165,47 @@ this_is_an_unlabeled_block {
       name: (identifier)
       value: (expression
         (null)))))
+
+==================
+Escape Sequences in Strings (#2)
+==================
+
+otelcol.processor.transform "drop_unneeded_resource_attributes" {
+  error_mode = "ignore"
+
+  trace_statements {
+    context = "resource"
+    statements = [
+      "delete_key(attributes, \"os.description\")",
+      "delete_key(attributes, \"os.type\")",
+      "delete_key(attributes, \"process.pid\")",
+    ]
+  }
+}
+
+---
+
+(source_file
+  (block
+    name: (identifier)
+    label: (string)
+    (attribute
+      name: (identifier)
+      value: (expression
+        (string)))
+    (block
+      name: (identifier)
+      (attribute
+        name: (identifier)
+        value: (expression
+          (string)))
+      (attribute
+        name: (identifier)
+        value: (expression
+          (array
+            (expression
+              (string))
+            (expression
+              (string))
+            (expression
+              (string))))))))
